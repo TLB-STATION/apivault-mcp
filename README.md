@@ -13,7 +13,7 @@
 **Secure, encrypted API key management for AI coding agents.**  
 *Official remote Model Context Protocol (MCP) server for [ApiVault](https://api-vault-opal.vercel.app).*
 
-[Quick Start](#-quick-start) • [Tools Reference](#-tools-reference) • [Supported Clients](#-supported-clients) • [Architecture](#-architecture) • [OAuth & Scopes](#-oauth-21--scopes) • [Troubleshooting](#-error-codes--troubleshooting) • [Self-Hosting](#-self-hosting--development)
+[Quick Start](#-quick-start) • [Tools Reference](#-tools-reference) • [Architecture](#-architecture) • [OAuth 2.1 & Scopes](#-oauth-21--scopes) • [Troubleshooting](#-error-codes--troubleshooting) • [Self-Hosting](#-self-hosting--development)
 
 <br/>
 
