@@ -4,7 +4,7 @@
 [![Protocol: MCP](https://img.shields.io/badge/Protocol-Model%20Context%20Protocol-green.svg)](https://modelcontextprotocol.io)
 [![Transport: Streamable HTTP](https://img.shields.io/badge/Transport-Streamable%20HTTP-purple.svg)](https://modelcontextprotocol.io/docs/concepts/transports)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7+-blue.svg)](https://www.typescriptlang.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-green.svg)](https://nodejs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D20.12.0-green.svg)](https://nodejs.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-16.3-black.svg)](https://nextjs.org/)
 [![OAuth 2.1](https://img.shields.io/badge/Auth-OAuth%202.1%20%2B%20PKCE-orange.svg)](https://oauth.net/2.1/)
 
@@ -247,7 +247,7 @@ Users can review connected AI agents, inspect granted scopes, and revoke access 
 You can run your own standalone MCP server or deploy it to your private cloud infrastructure:
 
 ### Prerequisites
-- Node.js >= 18.0.0
+- Node.js >= 20.12.0
 - npm or pnpm
 
 ### 1. Clone and Install
