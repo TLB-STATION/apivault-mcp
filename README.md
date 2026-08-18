@@ -17,7 +17,7 @@
 
 <br/>
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMohamed-Eltelb%2Fapivault-mcp&env=API_VAULT_URL,MCP_SERVER_URL&envDescription=ApiVault%20backend%20and%20public%20MCP%20server%20URLs&envLink=https%3A%2F%2Fapi-vault-opal.vercel.app%2Fdocs%2Fmcp)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FTLB-STATION%2Fapivault-mcp&env=API_VAULT_URL,MCP_SERVER_URL&envDescription=ApiVault%20backend%20and%20public%20MCP%20server%20URLs&envLink=https%3A%2F%2Fapi-vault-opal.vercel.app%2Fdocs%2Fmcp)
 
 </div>
 
@@ -262,7 +262,7 @@ You can run your own standalone MCP server or deploy it to your private cloud in
 
 ### 1. Clone and Install
 ```bash
-git clone https://github.com/Mohamed-Eltelb/apivault-mcp.git
+git clone https://github.com/TLB-STATION/apivault-mcp.git
 cd apivault-mcp
 npm install
 ```
@@ -302,7 +302,7 @@ npm start
 - **Main Platform:** [ApiVault Web Dashboard](https://api-vault-opal.vercel.app)
 - **CLI Tool:** [apivault-cli (npm)](https://www.npmjs.com/package/apivault)
 - **Documentation:** [ApiVault Docs & Guides](https://api-vault-opal.vercel.app/docs)
-- **Bug Reports & Issues:** [GitHub Issues](https://github.com/Mohamed-Eltelb/apivault-mcp/issues)
+- **Bug Reports & Issues:** [GitHub Issues](https://github.com/TLB-STATION/apivault-mcp/issues)
 
 ---
 
