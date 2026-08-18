@@ -57,7 +57,7 @@ describe("ApiVaultClient", () => {
       }),
     );
 
-    const result = await client.revealKey("key_1", "my-vault-passphrase");
+    const result = await client.revealKey("key_1", "my-vault-key");
     expect(result).toEqual(mockRevealed);
 
     expect(fetchSpy).toHaveBeenCalledWith(
@@ -66,7 +66,7 @@ describe("ApiVaultClient", () => {
         method: "POST",
         headers: expect.objectContaining({
           "Authorization": `Bearer ${token}`,
-          "x-vault-key": "my-vault-passphrase",
+          "x-vault-key": "my-vault-key",
         }),
       }),
     );

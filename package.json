@@ -22,7 +22,7 @@
     "api-keys",
     "oauth2"
   ],
-  "author": "Mohamed Eltelb",
+  "author": "TLB-STATION",
   "license": "MIT",
   "engines": {
     "node": ">=20.12.0"

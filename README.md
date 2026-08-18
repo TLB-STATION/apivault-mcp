@@ -314,4 +314,4 @@ npm start
 
 Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for more information.
 
-Copyright (c) 2026 Mohamed Eltelb • [ApiVault](https://api-vault-opal.vercel.app)
+Copyright (c) 2026 TLB-STATION • [ApiVault](https://api-vault-opal.vercel.app)
