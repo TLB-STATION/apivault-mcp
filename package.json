@@ -1,0 +1,41 @@
+{
+  "name": "apivault-mcp",
+  "version": "1.0.0",
+  "description": "Official Model Context Protocol (MCP) server for ApiVault. Secure, encrypted API key management for AI agents.",
+  "type": "module",
+  "scripts": {
+    "dev": "next dev -p 3001",
+    "build": "next build",
+    "start": "next start -p 3001",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "apivault",
+    "ai-agent",
+    "cursor",
+    "claude-desktop",
+    "windsurf",
+    "secrets",
+    "api-keys",
+    "oauth2"
+  ],
+  "author": "Mohamed Eltelb",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "next": "16.3.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "typescript": "^5.7.3",
+    "vitest": "^4.1.10"
+  }
+}
