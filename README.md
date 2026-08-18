@@ -44,18 +44,19 @@ Open Cursor Settings (`Cmd/Ctrl + Shift + J`) → **MCP** → **Add New MCP Serv
 
 ---
 
-### 2. Claude Desktop
-Add to your Claude Desktop configuration file:
-
-- **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
-- **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
-- **Linux:** `~/.config/Claude/claude_desktop_config.json`
+### 2. Claude Desktop & Claude.ai
+- **Method 1 (UI Connector):** In Claude Desktop / Claude.ai, navigate to **Settings → Connectors → Add Custom Connector**, enter Name: `ApiVault` and Remote URL: `https://apivault-mcp.vercel.app/mcp`.
+- **Method 2 (Config File):** Add to your Claude Desktop configuration file:
+  - **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+  - **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
+  - **Linux:** `~/.config/Claude/claude_desktop_config.json`
 
 ```json
 {
   "mcpServers": {
     "apivault": {
-      "url": "https://apivault-mcp.vercel.app/mcp"
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://apivault-mcp.vercel.app/mcp"]
     }
   }
 }
