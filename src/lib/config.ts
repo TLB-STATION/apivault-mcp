@@ -26,5 +26,7 @@ export function getProtectedResourceMetadata() {
     scopes_supported: [...MCP_SCOPES],
     bearer_methods_supported: ["header"],
     documentation_uri: `${apiVault}/docs/mcp`,
+    icon_uri: `${mcpServer}/mcp-icon-128.png`,
+    logo_uri: `${mcpServer}/mcp-icon-128.png`,
   };
 }

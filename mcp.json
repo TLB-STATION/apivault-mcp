@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "apivault": {
+      "url": "https://apivault-mcp.vercel.app/mcp"
+    }
+  }
+}

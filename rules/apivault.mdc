@@ -1,0 +1,15 @@
+---
+description: Integration rules and security practices for ApiVault MCP Server
+globs: *
+alwaysApply: false
+---
+
+# ApiVault MCP Agent Guidelines
+
+When using ApiVault MCP tools (`list_keys`, `get_key`, `reveal_key`, `add_key`, `update_key`, `delete_key`):
+
+1. **Discovery First**: Use `list_keys` to check existing services and environments before adding duplicate keys or requesting raw values.
+2. **Minimal Disclosure**: Only call `reveal_key` when raw secret values are strictly necessary for local process execution or debugging.
+3. **No Secrets in Chat**: Never echo, paste, or print unmasked API secrets in chat messages, markdown files, or commit logs.
+4. **Environment Awareness**: Pass the target environment (`Production`, `Staging`, `Development`) when listing or creating keys.
+5. **Custom Passphrase**: If `reveal_key` returns `VAULT_KEY_REQUIRED`, prompt the user for their custom vault passphrase and supply it in `vault_key`.
