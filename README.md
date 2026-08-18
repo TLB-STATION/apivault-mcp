@@ -23,7 +23,19 @@ Instead of pasting raw API keys into chat prompts or committing `.env` files to 
 1. Search and inspect available credentials using **masked previews** (e.g. `sk_live_••••1234`).
 2. Request raw secret values only when executing code via scoped permissions.
 3. Automatically store newly generated API keys directly into your vault.
-4. Support **Zero-Knowledge custom passphrases** decrypted in-memory on-the-fly.
+4. Support **Zero-Knowledge custom vault keys** decrypted in-memory on-the-fly.
+
+---
+
+## 🤖 Official AI Agent Skill
+
+If you use AI coding assistants (**Cursor**, **Claude Code**, **Windsurf**, or **Google Antigravity**), install the official [ApiVault Agent Skill](https://github.com/TLB-STATION/apivault-skill) into your workspace:
+
+```bash
+git clone https://github.com/TLB-STATION/apivault-skill.git .agents/skills/apivault
+```
+
+This equips your AI agents with native runbooks, copy-paste prompt templates, and security guidelines for interacting with ApiVault MCP.
 
 ---
 
@@ -136,7 +148,7 @@ Decrypt and return the raw, unmasked API key value.
 - **Required Scope:** `keys:reveal`
 - **Parameters:**
   - `id` *(string, required)*: The ID of the key to decrypt.
-  - `vault_key` *(string, optional)*: User's custom vault passphrase (required only if the account has Custom Encryption Mode enabled).
+  - `vault_key` *(string, optional)*: User's custom vault key (required only if the account has Custom Encryption Mode enabled).
 - **Example Agent Prompt:**
   > "I need the raw OpenAI API key so I can run the backend integration tests."
 
@@ -151,7 +163,7 @@ Securely encrypt and store a new API key in the vault.
   - `service` *(string, optional)*: Service name (e.g. `Stripe`, `OpenAI`, `AWS`).
   - `environment` *(string, optional)*: Target environment (defaults to `Production`).
   - `notes` *(string, optional)*: Developer documentation or usage notes.
-  - `vault_key` *(string, optional)*: Custom vault passphrase when required.
+  - `vault_key` *(string, optional)*: Custom vault key when required.
 - **Example Agent Prompt:**
   > "Store this newly generated Supabase service role key in our Production vault."
 
@@ -164,7 +176,7 @@ Update an existing key's metadata or re-encrypt its secret value.
   - `id` *(string, required)*: Key ID to update.
   - `name`, `service`, `environment`, `notes` *(string, optional)*: Metadata updates.
   - `key` *(string, optional)*: New raw secret value (triggers re-encryption).
-  - `vault_key` *(string, optional)*: Custom vault passphrase when updating secret value.
+  - `vault_key` *(string, optional)*: Custom vault key when updating secret value.
 - **Example Agent Prompt:**
   > "Update the notes on the Resend API key to 'Rotated on August 18'."
 
@@ -209,7 +221,7 @@ The MCP server uses a **Stateless Protocol Gateway** architecture, separating th
 ### Security Properties:
 1. **Zero Database Passwords**: The public `apivault-mcp` service holds no MySQL credentials and no master encryption keys.
 2. **Stateless Forwarding**: Client requests are verified and forwarded to ApiVault's scoped gateway (`/api/mcp/v1/keys`) using standard OAuth Bearer tokens.
-3. **In-Memory Passphrases**: Custom encryption mode passphrases (`vault_key`) are used only in-memory during single-request derivation and are never written to disk or logs.
+3. **In-Memory Vault Keys**: Custom encryption mode vault keys (`vault_key`) are used only in-memory during single-request derivation and are never written to disk or logs.
 
 ---
 
@@ -235,8 +247,8 @@ Users can review connected AI agents, inspect granted scopes, and revoke access 
 |---|---|---|
 | `UNAUTHORIZED` | Expired or missing OAuth Bearer token. | Re-authenticate in Cursor or Claude Desktop via the Reconnect action. |
 | `INSUFFICIENT_SCOPE` | Token lacks the required scope (e.g. tried `reveal_key` with only `keys:read`). | Re-authenticate and grant the `keys:reveal` or `keys:write` scope during browser consent. |
-| `VAULT_KEY_REQUIRED` | The account uses Custom Encryption Mode and no `vault_key` was passed. | Provide your custom vault passphrase in the tool arguments. |
-| `INVALID_VAULT_KEY` | The supplied custom vault passphrase failed decryption check. | Check that your master vault passphrase is correct and retry. |
+| `VAULT_KEY_REQUIRED` | The account uses Custom Encryption Mode and no `vault_key` was passed. | Provide your custom vault key in the tool arguments. |
+| `INVALID_VAULT_KEY` | The supplied custom vault key failed decryption check. | Check that your master vault key is correct and retry. |
 | `DUPLICATE_KEY` | A key with the same name and environment already exists. | Use `update_key` or pick a unique key name. |
 | `NOT_FOUND` | The specified key ID does not exist in your vault. | Use `list_keys` to verify the active key IDs. |
 | `NETWORK_ERROR` | Unable to reach the ApiVault backend gateway. | Check internet connectivity and verify `API_VAULT_URL`. |
@@ -291,6 +303,7 @@ npm start
 ## Community & Ecosystem
 
 - **Main Platform:** [ApiVault Web Dashboard](https://api-vault-opal.vercel.app)
+- **AI Agent Skill:** [apivault-skill (GitHub)](https://github.com/TLB-STATION/apivault-skill)
 - **CLI Tool:** [apivault-cli (npm)](https://www.npmjs.com/package/apivault)
 - **Documentation:** [ApiVault Docs & Guides](https://api-vault-opal.vercel.app/docs)
 - **Bug Reports & Issues:** [GitHub Issues](https://github.com/TLB-STATION/apivault-mcp/issues)

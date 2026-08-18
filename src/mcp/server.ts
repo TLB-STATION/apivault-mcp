@@ -78,13 +78,13 @@ export function createMcpServer(bearerToken: string): McpServer {
   server.registerTool(
     "reveal_key",
     {
-      description: "Decrypt and reveal the raw secret value of an API key. For accounts with custom encryption enabled, supply the user's vault_key passphrase.",
+      description: "Decrypt and reveal the raw secret value of an API key. For accounts with custom encryption enabled, supply the user's vault_key.",
       inputSchema: {
         id: z.string().describe("The ID of the key to decrypt"),
         vault_key: z
           .string()
           .optional()
-          .describe("Custom vault passphrase (required only if the account uses custom encryption mode)"),
+          .describe("Custom vault key (required only if the account uses custom encryption mode)"),
       },
     },
     async ({ id, vault_key }) => {
@@ -107,7 +107,7 @@ export function createMcpServer(bearerToken: string): McpServer {
         service: z.string().optional().describe("Service name (e.g. Stripe, OpenAI, Resend, Supabase)"),
         environment: z.string().optional().describe("Environment label (defaults to Production)"),
         notes: z.string().optional().describe("Optional developer notes or description"),
-        vault_key: z.string().optional().describe("Custom vault passphrase when required"),
+        vault_key: z.string().optional().describe("Custom vault key when required"),
       },
     },
     async ({ name, key, service, environment, notes, vault_key }) => {
@@ -134,7 +134,7 @@ export function createMcpServer(bearerToken: string): McpServer {
         environment: z.string().optional().describe("New environment name"),
         notes: z.string().optional().describe("New notes"),
         key: z.string().optional().describe("New raw secret value (re-encrypts key)"),
-        vault_key: z.string().optional().describe("Custom vault passphrase when updating secret value"),
+        vault_key: z.string().optional().describe("Custom vault key when updating secret value"),
       },
     },
     async ({ id, name, service, environment, notes, key, vault_key }) => {
