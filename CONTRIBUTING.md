@@ -1,14 +1,14 @@
 # Contributing to ApiVault MCP Server
 
-Thank you for your interest in contributing to the **ApiVault Remote MCP Server**! We welcome bug reports, feature requests, documentation improvements, and code contributions.
+Thank you for your interest in contributing to the **ApiVault Remote MCP Server**. We welcome bug reports, feature requests, documentation improvements, and code contributions.
 
 ---
 
-## 🛠️ Development Setup
+## Development Setup
 
 1. **Fork and Clone:**
    ```bash
-   git clone https://github.com/YOUR_USERNAME/apivault-mcp.git
+   git clone https://github.com/TLB-STATION/apivault-mcp.git
    cd apivault-mcp
    ```
 
@@ -35,9 +35,9 @@ Thank you for your interest in contributing to the **ApiVault Remote MCP Server*
 
 ---
 
-## 🧪 Testing Guidelines
+## Testing Guidelines
 
-Before opening a pull request, ensure all unit and integration tests pass cleanly and that the build succeeds:
+Before opening a pull request, ensure all unit tests pass cleanly and that the production build succeeds:
 
 ```bash
 # Run vitest test suite
@@ -51,7 +51,7 @@ When adding a new tool or modifying client behavior, please include correspondin
 
 ---
 
-## 📝 Commit Conventions
+## Commit Conventions
 
 We follow the [Conventional Commits](https://www.conventionalcommits.org/) specification:
 
@@ -64,7 +64,7 @@ We follow the [Conventional Commits](https://www.conventionalcommits.org/) speci
 
 ---
 
-## 🐞 Reporting Issues
+## Reporting Issues
 
 If you encounter a bug or unexpected behavior:
 1. Check existing [GitHub Issues](https://github.com/TLB-STATION/apivault-mcp/issues) to see if it has already been reported.
@@ -72,6 +72,6 @@ If you encounter a bug or unexpected behavior:
 
 ---
 
-## 📄 License
+## License
 
 By contributing to this repository, you agree that your contributions will be licensed under the project's **MIT License**.

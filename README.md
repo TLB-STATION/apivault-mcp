@@ -1,5 +1,3 @@
-<div align="center">
-
 # ApiVault Remote MCP Server
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
@@ -13,21 +11,15 @@
 **Secure, encrypted API key management for AI coding agents.**  
 *Official remote Model Context Protocol (MCP) server for [ApiVault](https://api-vault-opal.vercel.app).*
 
-[Quick Start](#-quick-start) • [Tools Reference](#-tools-reference) • [Architecture](#-architecture) • [OAuth 2.1 & Scopes](#-oauth-21--scopes) • [Troubleshooting](#-error-codes--troubleshooting) • [Self-Hosting](#-self-hosting--development)
-
-<br/>
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FTLB-STATION%2Fapivault-mcp&env=API_VAULT_URL,MCP_SERVER_URL&envDescription=ApiVault%20backend%20and%20public%20MCP%20server%20URLs&envLink=https%3A%2F%2Fapi-vault-opal.vercel.app%2Fdocs%2Fmcp)
-
-</div>
+[Quick Start](#quick-start) • [Tools Reference](#tools-reference) • [Architecture](#architecture) • [OAuth 2.1 & Scopes](#oauth-21--scopes) • [Error Codes & Troubleshooting](#error-codes--troubleshooting) • [Self-Hosting & Development](#self-hosting--development)
 
 ---
 
-## ⚡ Overview
+## Overview
 
 The **ApiVault Remote MCP Server** allows AI assistants (such as **Cursor**, **Claude Desktop**, **Windsurf**, and **Claude Code**) to interact with your encrypted secrets in **[ApiVault](https://api-vault-opal.vercel.app)** safely and auditably.
 
-Instead of pasting raw API keys into chat prompts or committing `.env` files to git, your AI agents can:
+Instead of pasting raw API keys into chat prompts or committing `.env` files to git, AI agents can:
 1. Search and inspect available credentials using **masked previews** (e.g. `sk_live_••••1234`).
 2. Request raw secret values only when executing code via scoped permissions.
 3. Automatically store newly generated API keys directly into your vault.
@@ -35,9 +27,7 @@ Instead of pasting raw API keys into chat prompts or committing `.env` files to 
 
 ---
 
-## 🚀 Quick Start
-
-Connect your favorite AI coding tool in less than 60 seconds:
+## Quick Start
 
 ### 1. Cursor
 Open Cursor Settings (`Cmd/Ctrl + Shift + J`) → **MCP** → **Add New MCP Server**, or add to your `~/.cursor/mcp.json`:
@@ -111,13 +101,13 @@ In your extension's MCP Settings JSON:
 }
 ```
 
-> **First Connection:** When your agent first initializes, a browser tab will automatically open to authenticate your ApiVault account and approve requested scopes.
+> **First Connection:** When your agent first initializes, a browser tab opens to the main ApiVault website (`https://api-vault-opal.vercel.app`) to authenticate your account and approve the requested scopes.
 
 ---
 
-## 🛠️ Tools Reference
+## Tools Reference
 
-The server exposes 6 high-level tools adhering to the Model Context Protocol:
+The server exposes 6 tools adhering to the Model Context Protocol:
 
 ### 1. `list_keys`
 List stored API keys with masked values (e.g. `sk_live_••••1234`). Prevents prompt pollution while allowing the agent to discover available services.
@@ -126,7 +116,7 @@ List stored API keys with masked values (e.g. `sk_live_••••1234`). Preve
   - `environment` *(string, optional)*: Filter by environment (e.g. `Production`, `Staging`, `Development`).
   - `service` *(string, optional)*: Filter by service name (e.g. `Stripe`, `OpenAI`, `Resend`).
 - **Example Agent Prompt:**
-  > *"What Stripe credentials do we have stored in Production?"*
+  > "What Stripe credentials do we have stored in Production?"
 
 ---
 
@@ -136,7 +126,7 @@ Retrieve metadata and masked preview for a specific credential by ID.
 - **Parameters:**
   - `id` *(string, required)*: The unique ID of the key.
 - **Example Agent Prompt:**
-  > *"Check the metadata and last updated date for key 'cm123abc'."*
+  > "Check the metadata and last updated date for key 'cm123abc'."
 
 ---
 
@@ -147,7 +137,7 @@ Decrypt and return the raw, unmasked API key value.
   - `id` *(string, required)*: The ID of the key to decrypt.
   - `vault_key` *(string, optional)*: User's custom vault passphrase (required only if the account has Custom Encryption Mode enabled).
 - **Example Agent Prompt:**
-  > *"I need the raw OpenAI API key so I can run the backend integration tests."*
+  > "I need the raw OpenAI API key so I can run the backend integration tests."
 
 ---
 
@@ -162,7 +152,7 @@ Securely encrypt and store a new API key in the vault.
   - `notes` *(string, optional)*: Developer documentation or usage notes.
   - `vault_key` *(string, optional)*: Custom vault passphrase when required.
 - **Example Agent Prompt:**
-  > *"Store this newly generated Supabase service role key in our Production vault."*
+  > "Store this newly generated Supabase service role key in our Production vault."
 
 ---
 
@@ -175,7 +165,7 @@ Update an existing key's metadata or re-encrypt its secret value.
   - `key` *(string, optional)*: New raw secret value (triggers re-encryption).
   - `vault_key` *(string, optional)*: Custom vault passphrase when updating secret value.
 - **Example Agent Prompt:**
-  > *"Update the notes on the Resend API key to 'Rotated on August 18'."*
+  > "Update the notes on the Resend API key to 'Rotated on August 18'."
 
 ---
 
@@ -185,44 +175,44 @@ Permanently remove an API key from the vault.
 - **Parameters:**
   - `id` *(string, required)*: Key ID to delete.
 - **Example Agent Prompt:**
-  > *"Delete the deprecated staging database credential."*
+  > "Delete the deprecated staging database credential."
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 The MCP server uses a **Stateless Protocol Gateway** architecture, separating the public transport layer from the database and cryptographic storage:
 
 ```
-┌──────────────────────────────────────────────────────────┐
-│  AI Agent (Cursor / Claude Desktop / Windsurf)           │
-└────────────────────────────┬─────────────────────────────┘
-                             │ Streamable HTTP (JSON-RPC)
-                             ▼
-┌──────────────────────────────────────────────────────────┐
-│  ApiVault MCP Server (apivault-mcp.vercel.app)           │
-│  - RFC 9728 Protected Resource Metadata (PRM)           │
-│  - Streamable HTTP Transport (/mcp)                      │
-│  - Zero Database Credentials / Zero Stored Keys          │
-└────────────────────────────┬─────────────────────────────┘
-                             │ Scoped HTTPS REST Gateway (Bearer Token)
-                             ▼
-┌──────────────────────────────────────────────────────────┐
-│  ApiVault Backend (api-vault-opal.vercel.app)            │
-│  - OAuth 2.1 Authorization Server (DCR + PKCE S256)      │
-│  - Browser Consent UI (/mcp/authorize)                   │
-│  - Cryptographic Key Decryption & MySQL Vault            │
-└──────────────────────────────────────────────────────────┘
++----------------------------------------------------------+
+|  AI Agent (Cursor / Claude Desktop / Windsurf)           |
++----------------------------+-----------------------------+
+                             | Streamable HTTP (JSON-RPC)
+                             v
++----------------------------------------------------------+
+|  ApiVault MCP Server (apivault-mcp.vercel.app)           |
+|  - RFC 9728 Protected Resource Metadata (PRM)           |
+|  - Streamable HTTP Transport (/mcp)                      |
+|  - Zero Database Credentials / Zero Stored Keys          |
++----------------------------+-----------------------------+
+                             | Scoped HTTPS REST Gateway (Bearer Token)
+                             v
++----------------------------------------------------------+
+|  ApiVault Backend (api-vault-opal.vercel.app)            |
+|  - OAuth 2.1 Authorization Server (DCR + PKCE S256)      |
+|  - Browser Consent UI (/mcp/authorize)                   |
+|  - Cryptographic Key Decryption & MySQL Vault            |
++----------------------------------------------------------+
 ```
 
-### Key Security Properties:
+### Security Properties:
 1. **Zero Database Passwords**: The public `apivault-mcp` service holds no MySQL credentials and no master encryption keys.
 2. **Stateless Forwarding**: Client requests are verified and forwarded to ApiVault's scoped gateway (`/api/mcp/v1/keys`) using standard OAuth Bearer tokens.
 3. **In-Memory Passphrases**: Custom encryption mode passphrases (`vault_key`) are used only in-memory during single-request derivation and are never written to disk or logs.
 
 ---
 
-## 🔐 OAuth 2.1 & Scopes
+## OAuth 2.1 & Scopes
 
 The MCP server implements standard OAuth 2.1 with **Dynamic Client Registration (RFC 7591)** and **PKCE S256 (RFC 7636)**:
 
@@ -234,15 +224,15 @@ The MCP server implements standard OAuth 2.1 with **Dynamic Client Registration 
 
 ### Managing & Revoking Connections
 Users can review connected AI agents, inspect granted scopes, and revoke access at any time in the web dashboard:
-👉 **[ApiVault Dashboard → Settings → MCP Connections](https://api-vault-opal.vercel.app/settings/mcp)**
+[ApiVault Dashboard → Settings → MCP Connections](https://api-vault-opal.vercel.app/settings/mcp)
 
 ---
 
-## ⚠️ Error Codes & Troubleshooting
+## Error Codes & Troubleshooting
 
 | Error Code | Reason | Resolution |
 |---|---|---|
-| `UNAUTHORIZED` | Expired or missing OAuth Bearer token. | Re-authenticate in Cursor/Claude Desktop via the Reconnect action. |
+| `UNAUTHORIZED` | Expired or missing OAuth Bearer token. | Re-authenticate in Cursor or Claude Desktop via the Reconnect action. |
 | `INSUFFICIENT_SCOPE` | Token lacks the required scope (e.g. tried `reveal_key` with only `keys:read`). | Re-authenticate and grant the `keys:reveal` or `keys:write` scope during browser consent. |
 | `VAULT_KEY_REQUIRED` | The account uses Custom Encryption Mode and no `vault_key` was passed. | Provide your custom vault passphrase in the tool arguments. |
 | `INVALID_VAULT_KEY` | The supplied custom vault passphrase failed decryption check. | Check that your master vault passphrase is correct and retry. |
@@ -252,12 +242,12 @@ Users can review connected AI agents, inspect granted scopes, and revoke access 
 
 ---
 
-## 💻 Self-Hosting & Development
+## Self-Hosting & Development
 
 You can run your own standalone MCP server or deploy it to your private cloud infrastructure:
 
 ### Prerequisites
-- Node.js `>= 18.0.0`
+- Node.js >= 18.0.0
 - npm or pnpm
 
 ### 1. Clone and Install
@@ -297,7 +287,7 @@ npm start
 
 ---
 
-## 🌐 Community & Ecosystem
+## Community & Ecosystem
 
 - **Main Platform:** [ApiVault Web Dashboard](https://api-vault-opal.vercel.app)
 - **CLI Tool:** [apivault-cli (npm)](https://www.npmjs.com/package/apivault)
@@ -306,8 +296,8 @@ npm start
 
 ---
 
-## 📄 License
+## License
 
 Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for more information.
 
-Copyright © 2026 [Mohamed Eltelb](https://github.com/Mohamed-Eltelb) • [ApiVault](https://api-vault-opal.vercel.app)
+Copyright (c) 2026 Mohamed Eltelb • [ApiVault](https://api-vault-opal.vercel.app)

@@ -4,7 +4,7 @@ At **ApiVault**, the security and privacy of developer credentials and API keys 
 
 ---
 
-## 🔒 Zero-Knowledge & Architecture Guarantees
+## Zero-Knowledge & Architecture Guarantees
 
 - **No Secrets on Disk**: The standalone MCP server acts purely as an in-memory transport gateway and does not store database credentials, master encryption keys, or unsealed secrets on disk.
 - **Masked Previews by Default**: The `list_keys` and `get_key` tools only expose masked string previews (e.g. `sk_live_••••1234`), protecting secrets from inadvertently leaking into LLM prompt contexts.
@@ -13,21 +13,21 @@ At **ApiVault**, the security and privacy of developer credentials and API keys 
 
 ---
 
-## 🛡️ Supported Versions
+## Supported Versions
 
 | Version | Supported |
 |---|---|
-| `1.x.x` | ✅ Yes |
-| `< 1.0.0` | ❌ No |
+| `1.x.x` | Yes |
+| `< 1.0.0` | No |
 
 ---
 
-## 🚨 Reporting a Vulnerability
+## Reporting a Vulnerability
 
 If you discover a potential security vulnerability in ApiVault or the ApiVault MCP Server, please **do NOT report it via a public GitHub issue**.
 
 Instead, please send a detailed security report to:
-📧 **security@apivault.dev** (or contact the maintainer directly via [Mohamed-Eltelb](https://github.com/Mohamed-Eltelb)).
+**security@apivault.dev** (or contact the maintainer directly via [Mohamed-Eltelb](https://github.com/Mohamed-Eltelb)).
 
 ### What to Include in Your Report:
 1. A description of the vulnerability and its potential impact.
