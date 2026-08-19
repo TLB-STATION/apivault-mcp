@@ -50,10 +50,14 @@ export function createMcpServer(bearerToken: string): McpServer {
   server.registerTool(
     "list_keys",
     {
+      title: "List API Keys",
       description: "List API keys (masked preview). Optional filters by environment (e.g. Production, Staging) or service name.",
       inputSchema: {
         environment: z.string().optional().describe("Filter by environment name"),
         service: z.string().optional().describe("Filter by service name (e.g. Stripe, OpenAI, AWS)"),
+      },
+      annotations: {
+        readOnlyHint: true,
       },
     },
     async ({ environment, service }) => {
@@ -69,9 +73,13 @@ export function createMcpServer(bearerToken: string): McpServer {
   server.registerTool(
     "get_key",
     {
+      title: "Get API Key Metadata",
       description: "Get metadata for a single API key by id (masked value).",
       inputSchema: {
         id: z.string().describe("The unique ID of the key to retrieve"),
+      },
+      annotations: {
+        readOnlyHint: true,
       },
     },
     async ({ id }) => {
@@ -87,6 +95,7 @@ export function createMcpServer(bearerToken: string): McpServer {
   server.registerTool(
     "reveal_key",
     {
+      title: "Reveal Secret API Key",
       description: "Decrypt and reveal the raw secret value of an API key. For accounts with custom encryption enabled, supply the user's vault_key.",
       inputSchema: {
         id: z.string().describe("The ID of the key to decrypt"),
@@ -94,6 +103,9 @@ export function createMcpServer(bearerToken: string): McpServer {
           .string()
           .optional()
           .describe("Custom vault key (required only if the account uses custom encryption mode)"),
+      },
+      annotations: {
+        readOnlyHint: true,
       },
     },
     async ({ id, vault_key }) => {
@@ -109,6 +121,7 @@ export function createMcpServer(bearerToken: string): McpServer {
   server.registerTool(
     "add_key",
     {
+      title: "Add API Key",
       description: "Store a new API key in the encrypted vault.",
       inputSchema: {
         name: z.string().describe("Key name (e.g. STRIPE_SECRET_KEY, OPENAI_API_KEY)"),
@@ -117,6 +130,9 @@ export function createMcpServer(bearerToken: string): McpServer {
         environment: z.string().optional().describe("Environment label (defaults to Production)"),
         notes: z.string().optional().describe("Optional developer notes or description"),
         vault_key: z.string().optional().describe("Custom vault key when required"),
+      },
+      annotations: {
+        readOnlyHint: false,
       },
     },
     async ({ name, key, service, environment, notes, vault_key }) => {
@@ -135,6 +151,7 @@ export function createMcpServer(bearerToken: string): McpServer {
   server.registerTool(
     "update_key",
     {
+      title: "Update API Key",
       description: "Update an existing API key's metadata or secret value.",
       inputSchema: {
         id: z.string().describe("The ID of the key to update"),
@@ -144,6 +161,10 @@ export function createMcpServer(bearerToken: string): McpServer {
         notes: z.string().optional().describe("New notes"),
         key: z.string().optional().describe("New raw secret value (re-encrypts key)"),
         vault_key: z.string().optional().describe("Custom vault key when updating secret value"),
+      },
+      annotations: {
+        readOnlyHint: false,
+        idempotentHint: true,
       },
     },
     async ({ id, name, service, environment, notes, key, vault_key }) => {
@@ -163,9 +184,14 @@ export function createMcpServer(bearerToken: string): McpServer {
   server.registerTool(
     "delete_key",
     {
+      title: "Delete API Key",
       description: "Permanently delete an API key from the vault.",
       inputSchema: {
         id: z.string().describe("The ID of the key to delete"),
+      },
+      annotations: {
+        readOnlyHint: false,
+        destructiveHint: true,
       },
     },
     async ({ id }) => {
