@@ -279,6 +279,10 @@ API_VAULT_URL=https://api-vault-opal.vercel.app
 
 # Public URL of this MCP server
 MCP_SERVER_URL=http://localhost:3001
+
+# MCP Session TTL in minutes (default: 60). Increase to reduce
+# "session not found" errors on serverless platforms with cold starts.
+# MCP_SESSION_TTL_MINUTES=60
 ```
 
 ### 3. Run Development Server
