@@ -1,5 +1,5 @@
-import { getProtectedResourceMetadata, getMcpServerUrl } from "@/lib/config";
-import { handleStatefulMcpRequest } from "@/mcp/session-registry";
+import { getMcpServerUrl } from "@/lib/config";
+import { handleMcpRequest as processMcpRequest } from "@/mcp/session-registry";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -8,8 +8,8 @@ export const maxDuration = 300;
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization, Mcp-Session-Id",
-  "Access-Control-Expose-Headers": "Mcp-Session-Id",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, Mcp-Session-Id, Mcp-Protocol-Version, Last-Event-Id",
+  "Access-Control-Expose-Headers": "Mcp-Session-Id, Mcp-Protocol-Version",
 };
 
 export async function OPTIONS() {
@@ -45,7 +45,7 @@ async function handleMcpRequest(req: Request): Promise<Response> {
   }
 
   try {
-    const res = await handleStatefulMcpRequest(req, token);
+    const res = await processMcpRequest(req, token);
     Object.entries(CORS_HEADERS).forEach(([k, v]) => {
       res.headers.set(k, v);
     });
