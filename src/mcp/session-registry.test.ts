@@ -32,7 +32,7 @@ describe("handleStatefulMcpRequest lifecycle", () => {
     expect(body.error.message).toContain("Parse error: Invalid JSON");
   });
 
-  it("returns 404 when session id is not found", async () => {
+  it("returns 404 when session id is not found for non-initialize requests", async () => {
     const req = new Request("https://apivault-mcp.vercel.app/mcp", {
       method: "POST",
       headers: {
@@ -46,6 +46,35 @@ describe("handleStatefulMcpRequest lifecycle", () => {
     expect(res.status).toBe(404);
     const body = await res.json();
     expect(body.error.message).toContain("Session not found");
+    expect(body.error.message).toContain("initialize");
+  });
+
+  it("allows transparent re-initialization when client sends initialize with a stale session id", async () => {
+    const req = new Request("https://apivault-mcp.vercel.app/mcp", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json, text/event-stream",
+        "Mcp-Session-Id": "stale-session-from-previous-cold-start",
+      },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        method: "initialize",
+        params: {
+          protocolVersion: "2025-11-25",
+          capabilities: {},
+          clientInfo: { name: "recovering-client", version: "1.0.0" },
+        },
+        id: 1,
+      }),
+    });
+
+    const res = await handleStatefulMcpRequest(req, "user-token");
+    // Should succeed (200) instead of failing with 404
+    expect(res.status).toBe(200);
+    const newSessionId = res.headers.get("mcp-session-id");
+    expect(newSessionId).toBeTruthy();
+    expect(newSessionId).not.toBe("stale-session-from-previous-cold-start");
   });
 
   it("completes initialize handshake and manages session across requests", async () => {

@@ -16,7 +16,18 @@ declare global {
   var __apivaultMcpStandaloneSessions: Map<string, McpSessionRecord> | undefined;
 }
 
-const SESSION_TTL_MS = 60 * 60 * 1000;
+const DEFAULT_SESSION_TTL_MINUTES = 60;
+
+function getSessionTtlMs(): number {
+  const envMinutes = process.env.MCP_SESSION_TTL_MINUTES;
+  if (envMinutes) {
+    const parsed = Number(envMinutes);
+    if (Number.isFinite(parsed) && parsed > 0) {
+      return parsed * 60 * 1000;
+    }
+  }
+  return DEFAULT_SESSION_TTL_MINUTES * 60 * 1000;
+}
 
 function sessionMap(): Map<string, McpSessionRecord> {
   if (!global.__apivaultMcpStandaloneSessions) {
@@ -41,8 +52,9 @@ function jsonRpcError(status: number, message: string): Response {
 
 function pruneExpiredSessions() {
   const now = Date.now();
+  const ttl = getSessionTtlMs();
   for (const [sessionId, record] of sessionMap()) {
-    if (now - record.lastUsedAt > SESSION_TTL_MS) {
+    if (now - record.lastUsedAt > ttl) {
       void disposeSession(sessionId);
     }
   }
@@ -119,7 +131,16 @@ export async function handleStatefulMcpRequest(req: Request, token: string): Pro
   if (sessionId) {
     const existing = sessionMap().get(sessionId);
     if (!existing) {
-      return jsonRpcError(404, "Session not found");
+      // Session expired or lost (cold start / redeploy / TTL).
+      // If the client is re-initializing, allow transparent recovery
+      // instead of forcing a hard 404 → manual refresh cycle.
+      if (req.method === "POST" && isInitializeRequest(parsedBody)) {
+        return createSession(token, req, parsedBody);
+      }
+      return jsonRpcError(
+        404,
+        "Session not found. The server may have restarted — please send a new initialize request without a session ID.",
+      );
     }
     if (existing.token !== token) {
       return jsonRpcError(403, "Forbidden: Session token mismatch");
