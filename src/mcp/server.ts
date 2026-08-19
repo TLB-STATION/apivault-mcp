@@ -1,6 +1,8 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import * as z from "zod";
 import { ApiVaultClient, ApiVaultError } from "../lib/apivault-client";
+import { getApiVaultUrl } from "../lib/config";
+import { getMcpServerIcons } from "../lib/mcp-icons";
 
 function toolError(message: string, code?: string) {
   return {
@@ -30,7 +32,14 @@ export function createMcpServer(bearerToken: string): McpServer {
   const client = new ApiVaultClient(bearerToken);
 
   const server = new McpServer(
-    { name: "apivault", version: "1.0.0" },
+    {
+      name: "apivault",
+      version: "1.0.0",
+      title: "ApiVault",
+      description: "Secure API key vault for AI agents and developers.",
+      websiteUrl: getApiVaultUrl(),
+      icons: getMcpServerIcons(),
+    },
     {
       capabilities: { tools: {} },
       instructions:

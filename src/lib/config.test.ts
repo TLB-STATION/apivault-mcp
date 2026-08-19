@@ -11,6 +11,8 @@ describe("config", () => {
     const prm = getProtectedResourceMetadata();
     expect(prm.resource).toBe("https://apivault-mcp.vercel.app/mcp");
     expect(prm.authorization_servers).toContain("https://api-vault-opal.vercel.app");
-    expect(prm.scopes_supported).toEqual(["keys:read", "keys:write", "keys:reveal"]);
+    expect(prm.bearer_methods_supported).toEqual(["header"]);
+    expect(prm.icon_uri).toBe("https://apivault-mcp.vercel.app/mcp-icon-128.png");
+    expect(prm.logo_uri).toBe("https://apivault-mcp.vercel.app/mcp-icon-128.png");
   });
 });
