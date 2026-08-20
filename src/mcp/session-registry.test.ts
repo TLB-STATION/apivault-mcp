@@ -77,7 +77,7 @@ describe("handleMcpRequest stateless lifecycle", () => {
     expect(body.error.message).toContain("Parse error: Invalid JSON");
   });
 
-  it("handles GET SSE connection requests without returning 404 session not found", async () => {
+  it("returns 405 on GET requests (standalone SSE not supported in stateless mode)", async () => {
     const getReq = new Request("https://apivault-mcp.vercel.app/mcp", {
       method: "GET",
       headers: {
@@ -86,8 +86,10 @@ describe("handleMcpRequest stateless lifecycle", () => {
     });
 
     const getRes = await handleMcpRequest(getReq, "test-token");
-    expect(getRes.status).toBe(200);
-    expect(getRes.headers.get("Content-Type")).toContain("text/event-stream");
+    expect(getRes.status).toBe(405);
+    expect(getRes.headers.get("Allow")).toBe("POST, OPTIONS, DELETE");
+    const body = await getRes.json();
+    expect(body.error.message).toContain("Method Not Allowed");
   });
 
   it("aliases handleStatefulMcpRequest for backwards compatibility", () => {

@@ -18,54 +18,27 @@ function jsonRpcError(status: number, message: string): Response {
 /**
  * Handles incoming MCP requests.
  * - POST: Processes JSON-RPC requests (initialize, tools/list, tools/call) statelessly.
- * - GET: Establishes a standalone SSE stream with immediate priming frame (: connected)
- *   and keep-alive heartbeats to satisfy MCP client stream managers (e.g. Go mcp_manager.go).
- * - DELETE: Acknowledges session teardown.
+ * - GET: Returns 405 — this stateless server does not support standalone SSE streams
+ *   (no server-initiated push / resources/subscribe). Returning 405 signals MCP clients
+ *   to stop attempting the background SSE connection entirely.
+ * - DELETE: Delegates to transport (returns 405 in stateless mode).
  */
 export async function handleMcpRequest(req: Request, token: string): Promise<Response> {
   if (req.method === "GET") {
-    const accept = req.headers.get("accept");
-    if (accept && !accept.includes("text/event-stream") && !accept.includes("*/*")) {
-      return jsonRpcError(406, "Not Acceptable: Client must accept text/event-stream");
-    }
-
-    const encoder = new TextEncoder();
-    let keepAliveTimer: NodeJS.Timeout | undefined;
-
-    const stream = new ReadableStream({
-      start(controller) {
-        // Send priming comment and an event so SSE message parsers (e.g. Go mcp_manager.go) register progress
-        controller.enqueue(encoder.encode(": connected\n\nevent: ping\ndata: {}\n\n"));
-
-        // Keep-alive heartbeat every 15 seconds
-        keepAliveTimer = setInterval(() => {
-          try {
-            controller.enqueue(encoder.encode(": keepalive\n\nevent: ping\ndata: {}\n\n"));
-          } catch {
-            if (keepAliveTimer) clearInterval(keepAliveTimer);
-          }
-        }, 15000);
+    return new Response(
+      JSON.stringify({
+        jsonrpc: "2.0",
+        error: { code: -32000, message: "Method Not Allowed: This server does not support standalone SSE streams" },
+        id: null,
+      }),
+      {
+        status: 405,
+        headers: {
+          "Content-Type": "application/json",
+          "Allow": "POST, OPTIONS, DELETE",
+        },
       },
-      cancel() {
-        if (keepAliveTimer) clearInterval(keepAliveTimer);
-      },
-    });
-
-    if (req.signal) {
-      req.signal.addEventListener("abort", () => {
-        if (keepAliveTimer) clearInterval(keepAliveTimer);
-      });
-    }
-
-    return new Response(stream, {
-      status: 200,
-      headers: {
-        "Content-Type": "text/event-stream",
-        "Cache-Control": "no-cache, no-transform",
-        "Connection": "keep-alive",
-        "X-Accel-Buffering": "no",
-      },
-    });
+    );
   }
 
   let parsedBody: unknown;
