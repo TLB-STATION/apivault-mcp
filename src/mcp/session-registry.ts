@@ -34,13 +34,13 @@ export async function handleMcpRequest(req: Request, token: string): Promise<Res
 
     const stream = new ReadableStream({
       start(controller) {
-        // Send immediate priming frame so clients register positive connection progress
-        controller.enqueue(encoder.encode(": connected\n\n"));
+        // Send priming comment and an event so SSE message parsers (e.g. Go mcp_manager.go) register progress
+        controller.enqueue(encoder.encode(": connected\n\nevent: ping\ndata: {}\n\n"));
 
         // Keep-alive heartbeat every 15 seconds
         keepAliveTimer = setInterval(() => {
           try {
-            controller.enqueue(encoder.encode(": keepalive\n\n"));
+            controller.enqueue(encoder.encode(": keepalive\n\nevent: ping\ndata: {}\n\n"));
           } catch {
             if (keepAliveTimer) clearInterval(keepAliveTimer);
           }
