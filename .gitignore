@@ -15,3 +15,4 @@ coverage/
 .DS_Store
 *.tsbuildinfo
 .agents/skills/
+AGENTS.md
