@@ -10,12 +10,14 @@ describe("mcp-server-card", () => {
     expect(card.$schema).toContain("server-card.schema.json");
     expect(card.name).toBe("app.apivault/vault");
     expect(card.title).toBe("ApiVault");
-    expect(card.version).toBe("1.0.0");
-    expect(card.websiteUrl).toBe("https://api-vault-opal.vercel.app");
+    expect(card.version).toBe("1.0.1");
+    const expectedApiVault = process.env.API_VAULT_URL ? process.env.API_VAULT_URL.replace(/\/+$/, "") : "https://apivault.tech";
+    const expectedMcp = process.env.MCP_SERVER_URL ? process.env.MCP_SERVER_URL.replace(/\/+$/, "") : "https://mcp.apivault.tech";
+    expect(card.websiteUrl).toBe(expectedApiVault);
     expect(card.remotes).toEqual([
       {
         type: "streamable-http",
-        url: "https://apivault-mcp.vercel.app/mcp",
+        url: `${expectedMcp}/mcp`,
         supportedProtocolVersions: ["2025-11-25", "2025-06-18", "2025-03-26"],
       },
     ]);
@@ -36,24 +38,25 @@ describe("GET /mcp/server-card", () => {
     expect(res.status).toBe(200);
     expect(res.headers.get("Content-Type")).toContain("application/mcp-server-card+json");
     const body = await res.json();
-    expect(body.remotes[0].url).toBe("https://apivault-mcp.vercel.app/mcp");
+    const expectedMcp = process.env.MCP_SERVER_URL ? process.env.MCP_SERVER_URL.replace(/\/+$/, "") : "https://mcp.apivault.tech";
+    expect(body.remotes[0].url).toBe(`${expectedMcp}/mcp`);
   });
 });
 
 describe("server-card redirects", () => {
   it("redirects /server-card to /mcp/server-card", async () => {
     const res = await getLegacyServerCard(
-      new Request("https://apivault-mcp.vercel.app/server-card"),
+      new Request("https://mcp.apivault.tech/server-card"),
     );
     expect(res.status).toBe(308);
-    expect(res.headers.get("location")).toBe("https://apivault-mcp.vercel.app/mcp/server-card");
+    expect(res.headers.get("location")).toBe("https://mcp.apivault.tech/mcp/server-card");
   });
 
   it("redirects /.well-known/mcp/server-card to /mcp/server-card", async () => {
     const res = await getWellKnownServerCard(
-      new Request("https://apivault-mcp.vercel.app/.well-known/mcp/server-card"),
+      new Request("https://mcp.apivault.tech/.well-known/mcp/server-card"),
     );
     expect(res.status).toBe(308);
-    expect(res.headers.get("location")).toBe("https://apivault-mcp.vercel.app/mcp/server-card");
+    expect(res.headers.get("location")).toBe("https://mcp.apivault.tech/mcp/server-card");
   });
 });

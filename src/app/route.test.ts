@@ -5,6 +5,7 @@ describe("Root route /", () => {
   it("redirects to ApiVault MCP documentation with 307 status", async () => {
     const res = await getRoot();
     expect(res.status).toBe(307);
-    expect(res.headers.get("location")).toBe("https://api-vault-opal.vercel.app/docs/mcp");
+    const expectedApiVault = process.env.API_VAULT_URL ? process.env.API_VAULT_URL.replace(/\/+$/, "") : "https://apivault.tech";
+    expect(res.headers.get("location")).toBe(`${expectedApiVault}/docs/mcp`);
   });
 });

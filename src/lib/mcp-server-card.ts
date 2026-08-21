@@ -14,7 +14,7 @@ export function getMcpServerCard() {
     $schema: MCP_SERVER_CARD_SCHEMA_URL,
     name: "app.apivault/vault",
     title: "ApiVault",
-    version: "1.0.0",
+    version: "1.0.1",
     description: "Secure API key vault for AI agents and developers.",
     websiteUrl: getApiVaultUrl(),
     remotes: [

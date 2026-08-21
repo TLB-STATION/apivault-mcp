@@ -10,11 +10,11 @@ function normalizeUrl(url: string | undefined, fallback: string): string {
 }
 
 export function getApiVaultUrl(): string {
-  return normalizeUrl(process.env.API_VAULT_URL, "https://api-vault-opal.vercel.app");
+  return normalizeUrl(process.env.API_VAULT_URL, "https://apivault.tech");
 }
 
 export function getMcpServerUrl(): string {
-  return normalizeUrl(process.env.MCP_SERVER_URL, "https://apivault-mcp.vercel.app");
+  return normalizeUrl(process.env.MCP_SERVER_URL, "https://mcp.apivault.tech");
 }
 
 export function getProtectedResourceMetadata() {

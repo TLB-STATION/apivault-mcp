@@ -1,6 +1,6 @@
 {
   "name": "apivault-mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Official Model Context Protocol (MCP) server for ApiVault. Secure, encrypted API key management for AI agents.",
   "type": "module",
   "scripts": {
@@ -34,7 +34,7 @@
   "bugs": {
     "url": "https://github.com/TLB-STATION/apivault-mcp/issues"
   },
-  "homepage": "https://api-vault-opal.vercel.app/docs/mcp",
+  "homepage": "https://apivault.tech/docs/mcp",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.30.0",
     "next": "16.3.0",

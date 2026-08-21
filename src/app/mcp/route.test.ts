@@ -13,7 +13,7 @@ describe("/mcp route handler", () => {
   });
 
   it("returns 401 Unauthorized with WWW-Authenticate header when no Bearer token is provided on GET, POST, DELETE", async () => {
-    const postReq = new Request("https://apivault-mcp.vercel.app/mcp", {
+    const postReq = new Request("https://mcp.apivault.tech/mcp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ jsonrpc: "2.0", method: "tools/list", id: 1 }),
@@ -26,11 +26,11 @@ describe("/mcp route handler", () => {
     const body = await postRes.json();
     expect(body.error).toBe("Unauthorized");
 
-    const getReq = new Request("https://apivault-mcp.vercel.app/mcp", { method: "GET" });
+    const getReq = new Request("https://mcp.apivault.tech/mcp", { method: "GET" });
     const getRes = await getMcp(getReq);
     expect(getRes.status).toBe(401);
 
-    const delReq = new Request("https://apivault-mcp.vercel.app/mcp", { method: "DELETE" });
+    const delReq = new Request("https://mcp.apivault.tech/mcp", { method: "DELETE" });
     const delRes = await deleteMcp(delReq);
     expect(delRes.status).toBe(401);
   });

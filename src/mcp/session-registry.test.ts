@@ -3,7 +3,7 @@ import { handleMcpRequest, handleStatefulMcpRequest } from "./session-registry";
 
 describe("handleMcpRequest stateless lifecycle", () => {
   it("completes initialize request and does NOT issue a session ID (stateless mode)", async () => {
-    const initReq = new Request("https://apivault-mcp.vercel.app/mcp", {
+    const initReq = new Request("https://mcp.apivault.tech/mcp", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -28,7 +28,7 @@ describe("handleMcpRequest stateless lifecycle", () => {
   });
 
   it("handles tools/list statelessly without requiring an Mcp-Session-Id header", async () => {
-    const listReq = new Request("https://apivault-mcp.vercel.app/mcp", {
+    const listReq = new Request("https://mcp.apivault.tech/mcp", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -46,7 +46,7 @@ describe("handleMcpRequest stateless lifecycle", () => {
   });
 
   it("handles requests gracefully even if client includes a legacy Mcp-Session-Id header", async () => {
-    const req = new Request("https://apivault-mcp.vercel.app/mcp", {
+    const req = new Request("https://mcp.apivault.tech/mcp", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -65,7 +65,7 @@ describe("handleMcpRequest stateless lifecycle", () => {
   });
 
   it("returns 400 on invalid JSON body", async () => {
-    const req = new Request("https://apivault-mcp.vercel.app/mcp", {
+    const req = new Request("https://mcp.apivault.tech/mcp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: "{ invalid_json",
@@ -78,7 +78,7 @@ describe("handleMcpRequest stateless lifecycle", () => {
   });
 
   it("returns 405 on GET requests (standalone SSE not supported in stateless mode)", async () => {
-    const getReq = new Request("https://apivault-mcp.vercel.app/mcp", {
+    const getReq = new Request("https://mcp.apivault.tech/mcp", {
       method: "GET",
       headers: {
         "Accept": "text/event-stream",

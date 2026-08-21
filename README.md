@@ -9,7 +9,7 @@
 [![OAuth 2.1](https://img.shields.io/badge/Auth-OAuth%202.1%20%2B%20PKCE-orange.svg)](https://oauth.net/2.1/)
 
 **Secure, encrypted API key management for AI coding agents.**  
-*Official remote Model Context Protocol (MCP) server for [ApiVault](https://api-vault-opal.vercel.app).*
+*Official remote Model Context Protocol (MCP) server for [ApiVault](https://apivault.tech).*
 
 [Quick Start](#quick-start) • [Tools Reference](#tools-reference) • [Architecture](#architecture) • [OAuth 2.1 & Scopes](#oauth-21--scopes) • [Error Codes & Troubleshooting](#error-codes--troubleshooting) • [Self-Hosting & Development](#self-hosting--development)
 
@@ -17,7 +17,7 @@
 
 ## Overview
 
-The **ApiVault Remote MCP Server** allows AI assistants (such as **Cursor**, **Claude Desktop**, **Windsurf**, and **Claude Code**) to interact with your encrypted secrets in **[ApiVault](https://api-vault-opal.vercel.app)** safely and auditably.
+The **ApiVault Remote MCP Server** allows AI assistants (such as **Cursor**, **Claude Desktop**, **Windsurf**, and **Claude Code**) to interact with your encrypted secrets in **[ApiVault](https://apivault.tech)** safely and auditably.
 
 Instead of pasting raw API keys into chat prompts or committing `.env` files to git, AI agents can:
 1. Search and inspect available credentials using **masked previews** (e.g. `sk_live_••••1234`).
@@ -48,7 +48,7 @@ Open Cursor Settings (`Cmd/Ctrl + Shift + J`) → **MCP** → **Add New MCP Serv
 {
   "mcpServers": {
     "apivault": {
-      "url": "https://apivault-mcp.vercel.app/mcp"
+      "url": "https://mcp.apivault.tech/mcp"
     }
   }
 }
@@ -57,7 +57,7 @@ Open Cursor Settings (`Cmd/Ctrl + Shift + J`) → **MCP** → **Add New MCP Serv
 ---
 
 ### 2. Claude Desktop & Claude.ai
-- **Method 1 (UI Connector):** In Claude Desktop / Claude.ai, navigate to **Settings → Connectors → Add Custom Connector**, enter Name: `ApiVault` and Remote URL: `https://apivault-mcp.vercel.app/mcp`.
+- **Method 1 (UI Connector):** In Claude Desktop / Claude.ai, navigate to **Settings → Connectors → Add Custom Connector**, enter Name: `ApiVault` and Remote URL: `https://mcp.apivault.tech/mcp`.
 - **Method 2 (Config File):** Add to your Claude Desktop configuration file:
   - **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
   - **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
@@ -68,7 +68,7 @@ Open Cursor Settings (`Cmd/Ctrl + Shift + J`) → **MCP** → **Add New MCP Serv
   "mcpServers": {
     "apivault": {
       "command": "npx",
-      "args": ["-y", "mcp-remote", "https://apivault-mcp.vercel.app/mcp"]
+      "args": ["-y", "mcp-remote", "https://mcp.apivault.tech/mcp"]
     }
   }
 }
@@ -83,7 +83,7 @@ Add to `~/.codeium/windsurf/mcp_config.json`:
 {
   "mcpServers": {
     "apivault": {
-      "url": "https://apivault-mcp.vercel.app/mcp"
+      "url": "https://mcp.apivault.tech/mcp"
     }
   }
 }
@@ -95,7 +95,7 @@ Add to `~/.codeium/windsurf/mcp_config.json`:
 Run in your terminal:
 
 ```bash
-claude mcp add apivault https://apivault-mcp.vercel.app/mcp
+claude mcp add apivault https://mcp.apivault.tech/mcp
 ```
 
 ---
@@ -107,14 +107,14 @@ In your extension's MCP Settings JSON:
 {
   "mcpServers": {
     "apivault": {
-      "url": "https://apivault-mcp.vercel.app/mcp",
+      "url": "https://mcp.apivault.tech/mcp",
       "transport": "http"
     }
   }
 }
 ```
 
-> **First Connection:** When your agent first initializes, a browser tab opens to the main ApiVault website (`https://api-vault-opal.vercel.app`) to authenticate your account and approve the requested scopes.
+> **First Connection:** When your agent first initializes, a browser tab opens to the main ApiVault website (`https://apivault.tech`) to authenticate your account and approve the requested scopes.
 
 ---
 
@@ -203,7 +203,7 @@ The MCP server uses a **Stateless Protocol Gateway** architecture, separating th
                              | Streamable HTTP (JSON-RPC)
                              v
 +----------------------------------------------------------+
-|  ApiVault MCP Server (apivault-mcp.vercel.app)           |
+|  ApiVault MCP Server (mcp.apivault.tech)                 |
 |  - RFC 9728 Protected Resource Metadata (PRM)           |
 |  - Streamable HTTP Transport (/mcp)                      |
 |  - Zero Database Credentials / Zero Stored Keys          |
@@ -211,7 +211,7 @@ The MCP server uses a **Stateless Protocol Gateway** architecture, separating th
                              | Scoped HTTPS REST Gateway (Bearer Token)
                              v
 +----------------------------------------------------------+
-|  ApiVault Backend (api-vault-opal.vercel.app)            |
+|  ApiVault Backend (apivault.tech)                        |
 |  - OAuth 2.1 Authorization Server (DCR + PKCE S256)      |
 |  - Browser Consent UI (/mcp/authorize)                   |
 |  - Cryptographic Key Decryption & MySQL Vault            |
@@ -237,7 +237,7 @@ The MCP server implements standard OAuth 2.1 with **Dynamic Client Registration 
 
 ### Managing & Revoking Connections
 Users can review connected AI agents, inspect granted scopes, and revoke access at any time in the web dashboard:
-[ApiVault Dashboard → Settings → MCP Connections](https://api-vault-opal.vercel.app/settings/mcp)
+[ApiVault Dashboard → Settings → MCP Connections](https://apivault.tech/settings/mcp)
 
 ---
 
@@ -275,7 +275,7 @@ Create `.env.local`:
 
 ```env
 # ApiVault Backend URL
-API_VAULT_URL=https://api-vault-opal.vercel.app
+API_VAULT_URL=https://apivault.tech
 
 # Public URL of this MCP server
 MCP_SERVER_URL=http://localhost:3001
@@ -306,10 +306,10 @@ npm start
 
 ## Community & Ecosystem
 
-- **Main Platform:** [ApiVault Web Dashboard](https://api-vault-opal.vercel.app)
+- **Main Platform:** [ApiVault Web Dashboard](https://apivault.tech)
 - **AI Agent Skill:** [apivault-skill (GitHub)](https://github.com/TLB-STATION/apivault-skill)
 - **CLI Tool:** [apivault-cli (npm)](https://www.npmjs.com/package/apivault)
-- **Documentation:** [ApiVault Docs & Guides](https://api-vault-opal.vercel.app/docs)
+- **Documentation:** [ApiVault Docs & Guides](https://apivault.tech/docs)
 - **Bug Reports & Issues:** [GitHub Issues](https://github.com/TLB-STATION/apivault-mcp/issues)
 
 ---
@@ -318,4 +318,4 @@ npm start
 
 Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for more information.
 
-Copyright (c) 2026 TLB-STATION • [ApiVault](https://api-vault-opal.vercel.app)
+Copyright (c) 2026 TLB-STATION • [ApiVault](https://apivault.tech)
